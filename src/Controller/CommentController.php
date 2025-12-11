@@ -24,9 +24,7 @@ final class CommentController extends AbstractController
             return $this->redirectToRoute('app_video_show', ['id' => $comment->getVideo()->getId()]);
         }
 
-        // Incrémenter les likes
-        $comment->setLikes($comment->getLikes() + 1);
-        $entityManager->flush();
+        // Les likes de commentaires ne sont pas gérés dynamiquement pour le moment
 
         return $this->redirectToRoute('app_video_show', [
             'id' => $comment->getVideo()->getId(),

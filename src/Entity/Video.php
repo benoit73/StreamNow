@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: VideoRepository::class)]
 class Video
@@ -23,19 +24,17 @@ class Video
     private ?string $description = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Url]
     private ?string $thumbnail = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Url]
     private ?string $url = null;
 
     #[ORM\Column]
     private ?int $views = null;
-
-    #[ORM\Column]
-    private ?int $likes = null;
-
-    #[ORM\Column]
-    private ?int $dislikes = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
@@ -126,30 +125,6 @@ class Video
     public function setViews(int $views): static
     {
         $this->views = $views;
-
-        return $this;
-    }
-
-    public function getLikes(): ?int
-    {
-        return $this->likes;
-    }
-
-    public function setLikes(int $likes): static
-    {
-        $this->likes = $likes;
-
-        return $this;
-    }
-
-    public function getDislikes(): ?int
-    {
-        return $this->dislikes;
-    }
-
-    public function setDislikes(int $dislikes): static
-    {
-        $this->dislikes = $dislikes;
 
         return $this;
     }
@@ -250,21 +225,7 @@ class Video
         return $this;
     }
 
-    /**
-     * Compte le nombre de likes (basé sur VideoLike)
-     */
-    public function getLikesCount(): int
-    {
-        return $this->videoLikes->filter(fn(VideoLike $vl) => $vl->isLike())->count();
-    }
 
-    /**
-     * Compte le nombre de dislikes (basé sur VideoLike)
-     */
-    public function getDislikesCount(): int
-    {
-        return $this->videoLikes->filter(fn(VideoLike $vl) => !$vl->isLike())->count();
-    }
 
     /**
      * Vérifie si un utilisateur a liké cette vidéo

@@ -14,7 +14,7 @@ class VideoLike
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: false)]
     private ?bool $isLike = null;
 
     #[ORM\ManyToOne(inversedBy: 'videoLikes')]

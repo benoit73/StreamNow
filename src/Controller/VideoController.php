@@ -41,8 +41,6 @@ final class VideoController extends AbstractController
             $video->setOwner($this->getUser());
             $video->setCreatedAt(new \DateTimeImmutable());
             $video->setViews(0);
-            $video->setLikes(0);
-            $video->setDislikes(0);
             
             $entityManager->persist($video);
             $entityManager->flush();
@@ -84,7 +82,6 @@ final class VideoController extends AbstractController
                     $reply->setVideo($video);
                     $reply->setCreatedBy($this->getUser());
                     $reply->setCreatedAt(new \DateTimeImmutable());
-                    $reply->setLikes(0);
 
                     $parentId = $replyData['parentId'] ?? null;
                     if ($parentId) {
@@ -110,7 +107,6 @@ final class VideoController extends AbstractController
                     $comment->setVideo($video);
                     $comment->setCreatedBy($this->getUser());
                     $comment->setCreatedAt(new \DateTimeImmutable());
-                    $comment->setLikes(0);
 
                     $entityManager->persist($comment);
                     $entityManager->flush();

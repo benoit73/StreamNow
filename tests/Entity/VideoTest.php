@@ -69,21 +69,7 @@ class VideoTest extends TestCase
         $this->assertEquals($views, $this->video->getViews());
     }
 
-    public function testLikesGetterAndSetter(): void
-    {
-        $likes = 250;
-        $this->video->setLikes($likes);
-        
-        $this->assertEquals($likes, $this->video->getLikes());
-    }
 
-    public function testDislikesGetterAndSetter(): void
-    {
-        $dislikes = 10;
-        $this->video->setDislikes($dislikes);
-        
-        $this->assertEquals($dislikes, $this->video->getDislikes());
-    }
 
     public function testCreatedAtGetterAndSetter(): void
     {
@@ -147,60 +133,6 @@ class VideoTest extends TestCase
         
         $this->video->removeVideoLike($videoLike);
         $this->assertFalse($this->video->getVideoLikes()->contains($videoLike));
-    }
-
-    public function testGetLikesCountWithNoLikes(): void
-    {
-        $this->assertEquals(0, $this->video->getLikesCount());
-    }
-
-    public function testGetLikesCountWithLikes(): void
-    {
-        $user1 = new User();
-        $user2 = new User();
-        $user3 = new User();
-
-        $like1 = new VideoLike();
-        $like1->setIsLike(true);
-        $like1->setOwner($user1);
-        
-        $like2 = new VideoLike();
-        $like2->setIsLike(true);
-        $like2->setOwner($user2);
-        
-        $dislike = new VideoLike();
-        $dislike->setIsLike(false);
-        $dislike->setOwner($user3);
-
-        $this->video->addVideoLike($like1);
-        $this->video->addVideoLike($like2);
-        $this->video->addVideoLike($dislike);
-
-        $this->assertEquals(2, $this->video->getLikesCount());
-    }
-
-    public function testGetDislikesCountWithNoDislikes(): void
-    {
-        $this->assertEquals(0, $this->video->getDislikesCount());
-    }
-
-    public function testGetDislikesCountWithDislikes(): void
-    {
-        $user1 = new User();
-        $user2 = new User();
-
-        $like = new VideoLike();
-        $like->setIsLike(true);
-        $like->setOwner($user1);
-        
-        $dislike = new VideoLike();
-        $dislike->setIsLike(false);
-        $dislike->setOwner($user2);
-
-        $this->video->addVideoLike($like);
-        $this->video->addVideoLike($dislike);
-
-        $this->assertEquals(1, $this->video->getDislikesCount());
     }
 
     public function testIsLikedByUserReturnsFalseWhenUserIsNull(): void

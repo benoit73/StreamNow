@@ -32,13 +32,7 @@ class CommentTest extends TestCase
         $this->assertEquals($date, $this->comment->getCreatedAt());
     }
 
-    public function testLikesGetterAndSetter(): void
-    {
-        $likes = 42;
-        $this->comment->setLikes($likes);
-        
-        $this->assertEquals($likes, $this->comment->getLikes());
-    }
+
 
     public function testVideoGetterAndSetter(): void
     {
