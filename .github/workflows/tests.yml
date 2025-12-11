@@ -8,28 +8,8 @@ on:
 
 jobs:
   tests:
-    name: Tests PHP ${{ matrix.php-version }}
+    name: Tests PHP 8.4
     runs-on: ubuntu-latest
-
-    services:
-      postgres:
-        image: postgres:16
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: streamnow_test
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
-    strategy:
-      fail-fast: false
-      matrix:
-        php-version: ['8.3', '8.4']
 
     steps:
       - name: Checkout code
@@ -38,8 +18,8 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php-version }}
-          extensions: mbstring, xml, ctype, iconv, intl, pdo_pgsql, dom
+          php-version: '8.4'
+          extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, dom
           coverage: xdebug
           tools: composer:v2
 
@@ -57,19 +37,14 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress --no-interaction
 
-      - name: Create database schema
+      - name: Create SQLite test database
         env:
-          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/streamnow_test?serverVersion=16&charset=utf8
+          DATABASE_URL: sqlite:///%kernel.project_dir%/var/data_test.db
         run: |
+          php bin/console doctrine:database:create --env=test --no-interaction --if-not-exists
           php bin/console doctrine:schema:create --env=test --no-interaction
 
       - name: Run PHPUnit tests
         env:
-          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/streamnow_test?serverVersion=16&charset=utf8
+          DATABASE_URL: sqlite:///%kernel.project_dir%/var/data_test.db
         run: php bin/phpunit --testdox
-
-      - name: Run PHPUnit with coverage
-        if: matrix.php-version == '8.4'
-        env:
-          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/streamnow_test?serverVersion=16&charset=utf8
-        run: php bin/phpunit --coverage-text
