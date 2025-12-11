@@ -1,0 +1,70 @@
+Fichier,Ligne,Problème,Type,Sévérité,Suggestion de Correction,Estimé (min)
+User.php,34,Propriété password nullable mais pas documentée comme optionnelle,Type Hint,BASSE,Ajouter JSDoc @var sur la propriété,5
+User.php,108,Import DateTimeImmutable utilise syntaxe complète,Import,BASSE,Ajouter use DateTimeImmutable; au niveau racine,5
+User.php,150,Méthode __serialize() manque de documentation,Documentation,BASSE,Ajouter JSDoc complet explicant le hashing,10
+User.php,200-220,Logique bidirectionnelle abonnements peu claire,Documentation,MOYENNE,Ajouter JSDoc explicatif sur la relation cyclique,10
+User.php,213,Manque type hint explicite sur paramètres,Type Hint,BASSE,Ajouter types union au lieu de JSDoc,15
+Video.php,30-35,Propriétés likes/dislikes/views redondantes avec collections,Architecture,HAUTE,Refactoriser : calculer depuis VideoLike au lieu de stocker,120
+Video.php,40,Description TEXT nullable OK mais pas validée,Validation,BASSE,Ajouter Assert\Length dans Doctrine,10
+Video.php,270-285,Méthode isLikedByUser() - boucle inefficace,Performance,MOYENNE,Utiliser filter() avec Collection ou requête DQL,30
+Video.php,287-301,Méthode isDislikedByUser() - code dupliqué,Code Duplication,MOYENNE,Refactoriser en hasUserVote() privée générique,30
+Video.php,50,Pas de validation URL sur propriété url,Validation,HAUTE,Ajouter Assert\Url dans l'Entity ou au niveau form,20
+Comment.php,19,Pas de validation sur longueur du contenu,Validation,MOYENNE,Ajouter Assert\Length(min: 1 max: 2000),10
+Comment.php,23,Propriété likes basique sans système réaction,Architecture,HAUTE,Refactoriser comme Video : utiliser table de réactions,90
+Comment.php,1,Manque import Assert pour validations,Import,BASSE,Ajouter use Symfony\Component\Validator\Constraints as Assert;,5
+Comment.php,55,Pas de méthode getRepliesCount(),Helper Method,BASSE,Ajouter public function getRepliesCount(): int,10
+VideoLike.php,13,Propriété isLike peut être null - source de bugs,Type Hint,HAUTE,Changer en private bool $isLike = false; (pas nullable),15
+VideoLike.php,8,Pas de documentation sur logique like=true dislike=false,Documentation,MOYENNE,Ajouter constantes ou JSDoc explicite,10
+VideoLike.php,20,Pas de méthode toggleVote(),Helper Method,BASSE,Ajouter public function toggleVote(): void,10
+Category.php,15,Pas de validation sur longueur du name,Validation,MOYENNE,Ajouter Assert\Length(min: 2 max: 255),10
+Category.php,18,Propriété logo pas validée URL,Validation,HAUTE,Ajouter Assert\Url sur la propriété,15
+Category.php,22,Pas de documentation sur format logo (URL vs fichier),Documentation,BASSE,Clarifier en JSDoc : "URL absolue uniquement",5
+SecurityController.php,1,Pas d'attribut final sur la classe,Code Style,BASSE,Ajouter final class SecurityController,5
+SecurityController.php,20,Pas de messages flash après authentification échouée,UX,BASSE,Ajouter addFlash('error') dans login(),10
+DefaultController.php,1,Pas d'attribut final,Code Style,BASSE,Ajouter final,5
+DefaultController.php,20,index() - pas de pagination,Performance,MOYENNE,Ajouter paginator pour grandes collections,30
+DefaultController.php,33,search() - pas de limite de résultats,Security,MOYENNE,Ajouter setMaxResults(50) ou paginer,20
+DefaultController.php,56,findByOwners([]) - vérification redondante,Code Quality,BASSE,Refactoriser dans repository method,10
+UserController.php,1,Pas d'attribut final,Code Style,BASSE,Ajouter final,5
+UserController.php,12,index() - pas de pagination si beaucoup vidéos,Performance,MOYENNE,Ajouter paginator,30
+UserController.php,26,Type hint - getUser() casté en JSDoc,Type Hint,BASSE,Utiliser ?User au lieu de /** @var User */,10
+UserController.php,50,subscribe() - pas de verrou race condition,Concurrency,BASSE,Ajouter optimistic locking ou transaction,30
+UserController.php,62,OPEN REDIRECT: referer non validé,Security,HAUTE,Valider domaine du referer avant redirect,20
+RegistrationController.php,1,Pas d'attribut final,Code Style,BASSE,Ajouter final,5
+RegistrationController.php,19,Email dupliqué - pas d'erreur utilisateur dédié,Error Handling,HAUTE,UniqueEntity valide mais feedback limité,30
+RegistrationController.php,25,Pas de try/catch pour persist/flush,Error Handling,MOYENNE,Ajouter gestion exceptions DB,20
+RegistrationController.php,27,Pas de message flash success après registration,UX,BASSE,Ajouter addFlash('success'),5
+RegistrationController.php,40,Mot de passe min 6 - trop faible,Security,HAUTE,Augmenter à 12 + exiger complexité,15
+CommentController.php,13,Pas de vérification que commentaire existe,Validation,MOYENNE,Vérifier $comment->getVideo() != null,10
+CommentController.php,19,Incrémentation directe sans check,Validation,BASSE,Vérifier que likes >= 0 toujours,5
+CommentController.php,22,Pas d'idempotence - clic x3 = x3 likes,Architecture,HAUTE,Refactoriser en système like/unlike toggle,60
+CommentController.php,26,Pas de route DELETE pour retirer like,API Design,HAUTE,Ajouter route DELETE /comment/{id}/unlike,20
+VideoController.php,24,index() - pas de pagination,Performance,MOYENNE,Implémenter pagerfanta,30
+VideoController.php,38-42,Initialisation compteurs hardcoded,Architecture,MOYENNE,Utiliser service ou listener d'événement,30
+VideoController.php,59-105,Logique POST complexe et non testable,Architecture,HAUTE,Refactoriser en CommentService dédié,90
+VideoController.php,73,getUser() appelé 3 fois au lieu d'une variable,Code Quality,BASSE,Créer variable locale $user au debut,5
+VideoController.php,90-95,Traitement CSRF manuel au lieu de handleRequest(),Code Quality,MOYENNE,Refactoriser pour cohérence,20
+VideoController.php,162,Logique vérif propriétaire simplifiable,Architecture,MOYENNE,Utiliser VideoVoter/Policy Symfony,30
+VideoController.php,172,Cast /** @var User */ à chaque fois,Type Hint,BASSE,Utiliser helper méthode ou type union,10
+VideoController.php,197-220,like() et dislike() = 60 lignes dupliquées,Code Duplication,HAUTE,Refactoriser en handleVideoVote() privée,45
+VideoController.php,245-268,Code dupliqué (voir ligne 197),Code Duplication,HAUTE,Voir ligne 197,0
+VideoLikeRepository.php,1,Complètement vide (exemples commentés),Missing Methods,BASSE,Ajouter getVoteStats(Video) pour ratio,15
+CategoryRepository.php,1,Complètement vide (exemples commentés),Missing Methods,BASSE,Ajouter findWithVideoCount(),20
+CommentRepository.php,1,Complètement vide (exemples commentés),Missing Methods,BASSE,Ajouter findRecentByVideo() findReplies(),25
+VideoRepository.php,24,search() - pas de limite de résultats,Security,HAUTE,Ajouter paramètre $limit = 50,10
+VideoRepository.php,25,LOWER() inefficace sur DB,Performance,BASSE,Créer index DB ou utiliser full-text search,60
+VideoRepository.php,40,findByOwners() - ne gère pas null (OK),Code Quality,OK,Pas de problème,0
+VideoRepository.php,50,Pas de méthode findPopularVideos(),Missing Methods,BASSE,Ajouter méthode pour top videos,15
+UserRepository.php,30,Commentaires générés non supprimés,Code Quality,BASSE,Nettoyer les exemples commentés,5
+UserRepository.php,35,Pas de méthode findByName(),Missing Methods,BASSE,Ajouter findByNameContaining(string),15
+VideoType.php,23,Validation url - pas de scheme spécifique,Validation,BASSE,OK pour vidéo hébergée externe,0
+VideoType.php,72,Thumbnail - pas de validation d'image réelle,Validation,BASSE,Vérifier extension ou MIME type,30
+CommentType.php,25,Max length 2000 - pas mentionné en front,UX,BASSE,Ajouter attribut maxlength en HTML,5
+RegistrationFormType.php,40,Password min 6 caractères,Security,HAUTE,Augmenter à 12 minimum,10
+RegistrationFormType.php,45,Pas d'exigence complexité password,Security,MOYENNE,Ajouter Regex pour majuscule/minuscule/chiffre/spécial,15
+RegistrationFormType.php,78,agreeTerms - pas de lien conditions,UX,MOYENNE,Ajouter lien vers /conditions-utilisation,10
+RegistrationFormType.php,85,Pas de captcha ou rate limiting,Security,BASSE,Considérer hCaptcha ou Cloudflare Turnstile,60
+AbstractCategoryCommand.php,14,ALLOWED_EXTENSIONS hardcoded,Configuration,BASSE,Mettre en config.yaml,10
+AbstractCategoryCommand.php,19,validateLogoUrl() ne teste pas accessibilité,Validation,BASSE,Peut être délégué au cache warming,30
+AddCategoryCommand.php,35,Pas de gestion exception persist/flush,Error Handling,BASSE,Ajouter try/catch minimal,10
+EditCategoryCommand.php,37,Message erreur si aucune modif confus,UX,BASSE,Clarifier avec exemple,5
