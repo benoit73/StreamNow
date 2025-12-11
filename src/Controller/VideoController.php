@@ -4,11 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Comment;
 use App\Entity\Video;
-use App\Entity\VideoLike;
 use App\Form\CommentType;
 use App\Form\VideoType;
 use App\Repository\CommentRepository;
-use App\Repository\VideoLikeRepository;
 use App\Repository\VideoRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -177,87 +175,5 @@ final class VideoController extends AbstractController
         }
 
         return $this->redirectToRoute('app_user_profile', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
-    }
-
-    #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    #[Route('/{id}/like', name: 'app_video_like', methods: ['POST'])]
-    public function like(Request $request, Video $video, EntityManagerInterface $entityManager, VideoLikeRepository $videoLikeRepository): Response
-    {
-
-        /** @var \App\Entity\User $user */
-        $user = $this->getUser();
-
-        if ($this->isCsrfTokenValid('like'.$video->getId(), $request->request->get('_token'))) {
-            // Chercher si l'utilisateur a déjà voté
-            $existingVote = $videoLikeRepository->findOneBy(['video' => $video, 'owner' => $user]);
-
-            if ($existingVote) {
-                if ($existingVote->isLike()) {
-                    // Déjà liké -> on retire le like
-                    $entityManager->remove($existingVote);
-                } else {
-                    // Était un dislike -> on le transforme en like
-                    $existingVote->setIsLike(true);
-                }
-            } else {
-                // Nouveau vote
-                $vote = new VideoLike();
-                $vote->setVideo($video);
-                $vote->setOwner($user);
-                $vote->setIsLike(true);
-                $entityManager->persist($vote);
-            }
-
-            $entityManager->flush();
-        }
-
-        // Rediriger vers la page d'où vient l'utilisateur
-        $referer = $request->headers->get('referer');
-        if ($referer) {
-            return $this->redirect($referer);
-        }
-
-        return $this->redirectToRoute('app_video_show', ['id' => $video->getId()]);
-    }
-
-    #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    #[Route('/{id}/dislike', name: 'app_video_dislike', methods: ['POST'])]
-    public function dislike(Request $request, Video $video, EntityManagerInterface $entityManager, VideoLikeRepository $videoLikeRepository): Response
-    {
-
-        /** @var \App\Entity\User $user */
-        $user = $this->getUser();
-
-        if ($this->isCsrfTokenValid('dislike'.$video->getId(), $request->request->get('_token'))) {
-            // Chercher si l'utilisateur a déjà voté
-            $existingVote = $videoLikeRepository->findOneBy(['video' => $video, 'owner' => $user]);
-
-            if ($existingVote) {
-                if (!$existingVote->isLike()) {
-                    // Déjà disliké -> on retire le dislike
-                    $entityManager->remove($existingVote);
-                } else {
-                    // Était un like -> on le transforme en dislike
-                    $existingVote->setIsLike(false);
-                }
-            } else {
-                // Nouveau vote
-                $vote = new VideoLike();
-                $vote->setVideo($video);
-                $vote->setOwner($user);
-                $vote->setIsLike(false);
-                $entityManager->persist($vote);
-            }
-
-            $entityManager->flush();
-        }
-
-        // Rediriger vers la page d'où vient l'utilisateur
-        $referer = $request->headers->get('referer');
-        if ($referer) {
-            return $this->redirect($referer);
-        }
-
-        return $this->redirectToRoute('app_video_show', ['id' => $video->getId()]);
     }
 }

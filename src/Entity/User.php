@@ -72,6 +72,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: VideoLike::class, mappedBy: 'owner', orphanRemoval: true)]
     private Collection $videoLikes;
 
+    /**
+     * @var Collection<int, CommentLike>
+     */
+    #[ORM\OneToMany(targetEntity: CommentLike::class, mappedBy: 'owner', orphanRemoval: true)]
+    private Collection $commentLikes;
+
     public function __construct()
     {
         $this->videos = new ArrayCollection();
@@ -79,6 +85,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->abonnes = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->videoLikes = new ArrayCollection();
+        $this->commentLikes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -315,6 +322,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($videoLike->getOwner() === $this) {
                 $videoLike->setOwner(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CommentLike>
+     */
+    public function getCommentLikes(): Collection
+    {
+        return $this->commentLikes;
+    }
+
+    public function addCommentLike(CommentLike $commentLike): static
+    {
+        if (!$this->commentLikes->contains($commentLike)) {
+            $this->commentLikes->add($commentLike);
+            $commentLike->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommentLike(CommentLike $commentLike): static
+    {
+        if ($this->commentLikes->removeElement($commentLike)) {
+            // set the owning side to null (unless already changed)
+            if ($commentLike->getOwner() === $this) {
+                $commentLike->setOwner(null);
             }
         }
 

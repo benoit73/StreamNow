@@ -225,6 +225,22 @@ class Video
         return $this;
     }
 
+    /**
+     * Compte le nombre de likes (basé sur VideoLike)
+     */
+    public function getLikesCount(): int
+    {
+        return $this->videoLikes->filter(fn(VideoLike $vl) => $vl->isLike())->count();
+    }
+
+    /**
+     * Compte le nombre de dislikes (basé sur VideoLike)
+     */
+    public function getDislikesCount(): int
+    {
+        return $this->videoLikes->filter(fn(VideoLike $vl) => !$vl->isLike())->count();
+    }
+
 
 
     /**

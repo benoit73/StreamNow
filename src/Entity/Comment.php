@@ -23,7 +23,7 @@ class Comment
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
-    private ?int $likes = null;
+    private int $likes = 0;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
     #[ORM\JoinColumn(nullable: false)]
@@ -42,9 +42,16 @@ class Comment
     #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
     private Collection $replies;
 
+    /**
+     * @var Collection<int, CommentLike>
+     */
+    #[ORM\OneToMany(targetEntity: CommentLike::class, mappedBy: 'comment', orphanRemoval: true)]
+    private Collection $commentLikes;
+
     public function __construct()
     {
         $this->replies = new ArrayCollection();
+        $this->commentLikes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -76,7 +83,7 @@ class Comment
         return $this;
     }
 
-    public function getLikes(): ?int
+    public function getLikes(): int
     {
         return $this->likes;
     }
@@ -152,5 +159,87 @@ class Comment
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, CommentLike>
+     */
+    public function getCommentLikes(): Collection
+    {
+        return $this->commentLikes;
+    }
+
+    public function addCommentLike(CommentLike $commentLike): static
+    {
+        if (!$this->commentLikes->contains($commentLike)) {
+            $this->commentLikes->add($commentLike);
+            $commentLike->setComment($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommentLike(CommentLike $commentLike): static
+    {
+        if ($this->commentLikes->removeElement($commentLike)) {
+            // set the owning side to null (unless already changed)
+            if ($commentLike->getComment() === $this) {
+                $commentLike->setComment(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Compte le nombre de likes (basé sur CommentLike)
+     */
+    public function getLikesCount(): int
+    {
+        return $this->commentLikes->filter(fn(CommentLike $cl) => $cl->isLike())->count();
+    }
+
+    /**
+     * Compte le nombre de dislikes (basé sur CommentLike)
+     */
+    public function getDislikesCount(): int
+    {
+        return $this->commentLikes->filter(fn(CommentLike $cl) => !$cl->isLike())->count();
+    }
+
+    /**
+     * Vérifie si un utilisateur a liké ce commentaire
+     */
+    public function isLikedByUser(?User $user): bool
+    {
+        if (!$user) {
+            return false;
+        }
+
+        foreach ($this->commentLikes as $commentLike) {
+            if ($commentLike->getOwner() === $user && $commentLike->isLike()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Vérifie si un utilisateur a disliké ce commentaire
+     */
+    public function isDislikedByUser(?User $user): bool
+    {
+        if (!$user) {
+            return false;
+        }
+
+        foreach ($this->commentLikes as $commentLike) {
+            if ($commentLike->getOwner() === $user && !$commentLike->isLike()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
