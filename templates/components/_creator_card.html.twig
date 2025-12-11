@@ -1,0 +1,10 @@
+{# Carte de créateur - Paramètres: creator #}
+<a href="{{ path('app_user_profile', {id: creator.id}) }}" class="flex items-center space-x-3 bg-gray-800/50 hover:bg-gray-800 border border-gray-700/50 hover:border-purple-500/50 rounded-xl px-4 py-3 transition duration-300 group">
+    <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
+        <span class="text-white text-sm font-bold">{{ creator.name|slice(0, 1)|upper }}</span>
+    </div>
+    <div>
+        <p class="text-white font-medium group-hover:text-purple-400 transition">{{ creator.name }}</p>
+        <p class="text-gray-500 text-xs">{{ creator.videos|length }} vidéo{{ creator.videos|length > 1 ? 's' : '' }}</p>
+    </div>
+</a>

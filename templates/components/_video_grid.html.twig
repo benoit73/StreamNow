@@ -1,0 +1,15 @@
+{# Grille de vidéos - Paramètres: videos #}
+{% if videos|length > 0 %}
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    {% for video in videos %}
+        {% include 'components/_video_card.html.twig' with {video: video} %}
+    {% endfor %}
+</div>
+{% else %}
+    {% include 'components/_empty_state.html.twig' with {
+        icon: 'video',
+        title: 'Aucune vidéo pour le moment',
+        message: 'Soyez le premier à partager une vidéo sur StreamNow !',
+        showUploadButton: true
+    } %}
+{% endif %}

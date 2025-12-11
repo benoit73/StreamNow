@@ -1,0 +1,51 @@
+{# Carte de vidéo - Paramètres: video #}
+<article class="group bg-gray-800/50 rounded-xl overflow-hidden border border-gray-700/50 hover:border-purple-500/50 hover:shadow-xl hover:shadow-purple-500/10 transition-all duration-300 transform hover:-translate-y-1">
+    {# Miniature #}
+    <a href="{{ path('app_video_show', {id: video.id}) }}" class="block relative aspect-video overflow-hidden">
+        <img src="{{ video.thumbnail }}" alt="{{ video.title }}" 
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            onerror="this.src='https://via.placeholder.com/640x360/1f2937/6b7280?text=StreamNow'">
+        {# Overlay au hover #}
+        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+            <div class="w-16 h-16 bg-purple-600/90 rounded-full flex items-center justify-center shadow-lg">
+                <svg class="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z"></path>
+                </svg>
+            </div>
+        </div>
+        {# Badge vues #}
+        <div class="absolute bottom-2 right-2 bg-black/80 text-white text-xs px-2 py-1 rounded">
+            {{ video.views|number_format(0, ',', ' ') }} vues
+        </div>
+    </a>
+
+    {# Informations #}
+    <div class="p-4">
+        <div class="flex space-x-3">
+            {# Avatar créateur #}
+            <a href="{{ path('app_user_profile', {id: video.owner.id}) }}" class="flex-shrink-0">
+                <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center hover:ring-2 hover:ring-purple-400 transition">
+                    <span class="text-white text-sm font-medium">{{ video.owner.name|slice(0, 1)|upper }}</span>
+                </div>
+            </a>
+            <div class="flex-1 min-w-0">
+                {# Titre #}
+                <a href="{{ path('app_video_show', {id: video.id}) }}" class="block">
+                    <h3 class="text-white font-medium text-sm line-clamp-2 group-hover:text-purple-400 transition">
+                        {{ video.title }}
+                    </h3>
+                </a>
+                {# Créateur #}
+                <a href="{{ path('app_user_profile', {id: video.owner.id}) }}" class="text-gray-400 text-sm hover:text-purple-400 transition">
+                    {{ video.owner.name }}
+                </a>
+                {# Stats #}
+                <div class="flex items-center text-gray-500 text-xs mt-1">
+                    <span>{{ video.views|number_format(0, ',', ' ') }} vues</span>
+                    <span class="mx-1">•</span>
+                    <span>{{ video.createdAt|date('d/m/Y') }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</article>

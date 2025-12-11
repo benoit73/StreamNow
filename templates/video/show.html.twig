@@ -1,0 +1,385 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ video.title }} - StreamNow{% endblock %}
+
+{% block body %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {# Colonne principale - Lecteur et infos #}
+        <div class="lg:col-span-2 space-y-6">
+            {# Lecteur vidéo (faux) #}
+            <div class="relative bg-black rounded-xl overflow-hidden shadow-2xl">
+                <div class="aspect-video relative group">
+                    {# Miniature en fond #}
+                    <img src="{{ video.thumbnail }}" alt="{{ video.title }}" 
+                        class="w-full h-full object-cover"
+                        onerror="this.src='https://via.placeholder.com/1280x720/1f2937/6b7280?text=StreamNow'">
+                    
+                    {# Overlay sombre #}
+                    <div class="absolute inset-0 bg-black/40"></div>
+                    
+                    {# Bouton play central #}
+                    <a href="{{ video.url }}" target="_blank" rel="noopener noreferrer"
+                        class="absolute inset-0 flex items-center justify-center">
+                        <div class="w-20 h-20 md:w-24 md:h-24 bg-purple-600/90 hover:bg-purple-500 rounded-full flex items-center justify-center shadow-2xl shadow-purple-500/50 transition-all duration-300 transform hover:scale-110 group-hover:scale-110">
+                            <svg class="w-10 h-10 md:w-12 md:h-12 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z"></path>
+                            </svg>
+                        </div>
+                    </a>
+                    
+                    {# Badge "Cliquez pour voir" #}
+                    <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2">
+                        <span class="bg-black/70 text-white text-sm px-4 py-2 rounded-full backdrop-blur-sm">
+                            Cliquez pour regarder sur la source
+                        </span>
+                    </div>
+                    
+                    {# Barre de progression fictive #}
+                    <div class="absolute bottom-0 left-0 right-0 h-1 bg-gray-700">
+                        <div class="h-full w-0 bg-gradient-to-r from-purple-600 to-pink-500"></div>
+                    </div>
+                </div>
+                
+                {# Contrôles fictifs #}
+                <div class="bg-gray-900 px-4 py-3 flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <button class="text-gray-400 hover:text-white transition">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z"></path>
+                            </svg>
+                        </button>
+                        <button class="text-gray-400 hover:text-white transition">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15.536a5 5 0 001.414 1.414m2.828-9.9a9 9 0 0112.728 0"></path>
+                            </svg>
+                        </button>
+                        <span class="text-gray-400 text-sm">0:00 / 0:00</span>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <button class="text-gray-400 hover:text-white transition">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                        </button>
+                        <a href="{{ video.url }}" target="_blank" class="text-gray-400 hover:text-white transition" title="Ouvrir la source">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                            </svg>
+                        </a>
+                        <button class="text-gray-400 hover:text-white transition">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            {# Informations de la vidéo #}
+            <div class="bg-gray-800/50 rounded-xl border border-gray-700/50 p-6">
+                {# Titre #}
+                <h1 class="text-xl md:text-2xl font-bold text-white mb-4">{{ video.title }}</h1>
+                
+                {# Stats et actions #}
+                <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-gray-700">
+                    <div class="flex items-center space-x-4 text-gray-400 text-sm">
+                        <span class="flex items-center">
+                            <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                            </svg>
+                            {{ video.views|number_format(0, ',', ' ') }} vues
+                        </span>
+                        <span>•</span>
+                        <span>{{ video.createdAt|date('d M Y') }}</span>
+                    </div>
+                    
+                    {# Boutons d'action #}
+                    <div class="flex items-center space-x-2">
+                        {# Bouton Like #}
+                        {% if app.user %}
+                        <form action="{{ path('app_video_like', {id: video.id}) }}" method="post" class="inline">
+                            <input type="hidden" name="_token" value="{{ csrf_token('like' ~ video.id) }}">
+                            <button type="submit" class="flex items-center space-x-2 px-4 py-2 {{ video.isLikedByUser(app.user) ? 'bg-green-600/30 border-green-500/50' : 'bg-gray-700/50 border-transparent' }} hover:bg-green-600/30 hover:border-green-500/50 border rounded-full transition group">
+                                <svg class="w-5 h-5 {{ video.isLikedByUser(app.user) ? 'text-green-400' : 'text-gray-300' }} group-hover:text-green-400" fill="{{ video.isLikedByUser(app.user) ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"></path>
+                                </svg>
+                                <span class="{{ video.isLikedByUser(app.user) ? 'text-green-400' : 'text-gray-300' }} group-hover:text-green-400 text-sm">{{ video.likesCount|number_format(0, ',', ' ') }}</span>
+                            </button>
+                        </form>
+                        {% else %}
+                        <a href="{{ path('app_login') }}" class="flex items-center space-x-2 px-4 py-2 bg-gray-700/50 hover:bg-gray-700 rounded-full transition">
+                            <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"></path>
+                            </svg>
+                            <span class="text-gray-300 text-sm">{{ video.likesCount|number_format(0, ',', ' ') }}</span>
+                        </a>
+                        {% endif %}
+                        
+                        {# Bouton Dislike #}
+                        {% if app.user %}
+                        <form action="{{ path('app_video_dislike', {id: video.id}) }}" method="post" class="inline">
+                            <input type="hidden" name="_token" value="{{ csrf_token('dislike' ~ video.id) }}">
+                            <button type="submit" class="flex items-center space-x-2 px-4 py-2 {{ video.isDislikedByUser(app.user) ? 'bg-red-600/30 border-red-500/50' : 'bg-gray-700/50 border-transparent' }} hover:bg-red-600/30 hover:border-red-500/50 border rounded-full transition group">
+                                <svg class="w-5 h-5 {{ video.isDislikedByUser(app.user) ? 'text-red-400' : 'text-gray-300' }} group-hover:text-red-400 transform rotate-180" fill="{{ video.isDislikedByUser(app.user) ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"></path>
+                                </svg>
+                                <span class="{{ video.isDislikedByUser(app.user) ? 'text-red-400' : 'text-gray-300' }} group-hover:text-red-400 text-sm">{{ video.dislikesCount|number_format(0, ',', ' ') }}</span>
+                            </button>
+                        </form>
+                        {% else %}
+                        <a href="{{ path('app_login') }}" class="flex items-center space-x-2 px-4 py-2 bg-gray-700/50 hover:bg-gray-700 rounded-full transition">
+                            <svg class="w-5 h-5 text-gray-300 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"></path>
+                            </svg>
+                            <span class="text-gray-300 text-sm">{{ video.dislikesCount|number_format(0, ',', ' ') }}</span>
+                        </a>
+                        {% endif %}
+                        
+                        {# Bouton Partager avec modale #}
+                        {% include 'components/_share_modal.html.twig' with {url: url('app_video_show', {id: video.id})} %}
+                    </div>
+                </div>
+
+                {# Infos créateur #}
+                <div class="flex items-start justify-between mt-4">
+                    <a href="{{ path('app_user_profile', {id: video.owner.id}) }}" class="flex items-center space-x-4 group">
+                        <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center group-hover:ring-2 group-hover:ring-purple-400 transition">
+                            <span class="text-white text-lg font-bold">{{ video.owner.name|slice(0, 1)|upper }}</span>
+                        </div>
+                        <div>
+                            <h3 class="text-white font-semibold group-hover:text-purple-400 transition">{{ video.owner.name }}</h3>
+                            <p class="text-gray-400 text-sm">{{ video.owner.abonnes|length }} abonné{{ video.owner.abonnes|length > 1 ? 's' : '' }}</p>
+                        </div>
+                    </a>
+                    {% if app.user and app.user.id != video.owner.id %}
+                    <form action="{{ path('app_user_subscribe', {id: video.owner.id}) }}" method="post" data-turbo="false">
+                        <input type="hidden" name="_token" value="{{ csrf_token('subscribe' ~ video.owner.id) }}">
+                        {% if app.user.abonnements.contains(video.owner) %}
+                        <button type="submit" class="px-6 py-2 border-2 border-gray-600 text-gray-300 font-semibold rounded-full hover:bg-gray-700 hover:border-gray-500 transition duration-300 flex items-center space-x-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span>Abonné</span>
+                        </button>
+                        {% else %}
+                        <button type="submit" class="px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 text-white font-semibold rounded-full shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition duration-300">
+                            S'abonner
+                        </button>
+                        {% endif %}
+                    </form>
+                    {% elseif app.user and app.user.id == video.owner.id %}
+                    <a href="{{ path('app_video_edit', {id: video.id}) }}" class="px-6 py-2 border-2 border-purple-500/50 text-purple-400 font-semibold rounded-full hover:bg-purple-500/10 transition duration-300">
+                        Modifier
+                    </a>
+                    {% elseif not app.user %}
+                    <a href="{{ path('app_login') }}" class="px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 text-white font-semibold rounded-full shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition duration-300">
+                        S'abonner
+                    </a>
+                    {% endif %}
+                </div>
+
+                {# Description #}
+                {% if video.description %}
+                <div class="mt-4 p-4 bg-gray-900/50 rounded-xl">
+                    <p class="text-gray-300 whitespace-pre-line">{{ video.description }}</p>
+                </div>
+                {% endif %}
+            </div>
+
+            {# Section commentaires #}
+            <div class="bg-gray-800/50 rounded-xl border border-gray-700/50 p-6" id="comments">
+                <h2 class="text-lg font-semibold text-white mb-6">
+                    {{ comments|length }} commentaire{{ comments|length > 1 ? 's' : '' }}
+                </h2>
+                
+                {# Formulaire d'ajout de commentaire #}
+                {% if app.user %}
+                <div class="mb-8">
+                    {{ form_start(commentForm, {'attr': {'class': 'space-y-4', 'data-turbo': 'false', 'id': 'main-comment-form'}}) }}
+                    <div class="flex space-x-4">
+                        <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center flex-shrink-0">
+                            <span class="text-white text-sm font-medium">{{ app.user.name|slice(0, 1)|upper }}</span>
+                        </div>
+                        <div class="flex-1">
+                            {{ form_widget(commentForm.content, {'attr': {'rows': 2, 'id': 'main-comment-content'}}) }}
+                        </div>
+                    </div>
+                    <div class="flex justify-end space-x-3">
+                        <button type="button" onclick="document.getElementById('main-comment-content').value = ''" 
+                            class="px-4 py-2 text-gray-400 hover:text-white transition">
+                            Annuler
+                        </button>
+                        <button type="submit" 
+                            class="px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 text-white font-medium rounded-full shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition duration-300">
+                            Commenter
+                        </button>
+                    </div>
+                    {{ form_end(commentForm) }}
+                </div>
+                {% else %}
+                <div class="mb-8 p-4 bg-gray-900/50 rounded-lg text-center">
+                    <p class="text-gray-400">
+                        <a href="{{ path('app_login') }}" class="text-purple-400 hover:text-purple-300">Connectez-vous</a> pour laisser un commentaire.
+                    </p>
+                </div>
+                {% endif %}
+
+                {# Liste des commentaires #}
+                {% if comments|length > 0 %}
+                    <div class="space-y-6">
+                        {% for comment in comments %}
+                        <div class="comment-thread" id="comment-{{ comment.id }}">
+                            {# Commentaire principal #}
+                            <div class="flex space-x-4">
+                                <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center flex-shrink-0">
+                                    <span class="text-white text-sm font-medium">{{ comment.createdBy.name|slice(0, 1)|upper }}</span>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-white text-sm font-semibold">{{ comment.createdBy.name }}</span>
+                                        {% if comment.createdBy.id == video.owner.id %}
+                                        <span class="px-2 py-0.5 bg-gray-700 text-gray-300 text-xs rounded">Créateur</span>
+                                        {% endif %}
+                                        <span class="text-gray-500 text-xs">{{ comment.createdAt|date('d/m/Y à H:i') }}</span>
+                                    </div>
+                                    <p class="text-gray-300 text-sm mt-2 whitespace-pre-line">{{ comment.content }}</p>
+                                    
+                                    {# Actions du commentaire #}
+                                    <div class="flex items-center space-x-4 mt-3">
+                                        {% if app.user %}
+                                        <form action="{{ path('app_comment_like', {id: comment.id}) }}" method="post" class="inline" data-turbo="false">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('like' ~ comment.id) }}">
+                                            <button type="submit" class="flex items-center space-x-1 text-gray-500 hover:text-purple-400 transition text-sm group">
+                                                <svg class="w-4 h-4 group-hover:scale-110 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"></path>
+                                                </svg>
+                                                <span>{{ comment.likes }}</span>
+                                            </button>
+                                        </form>
+                                        {% else %}
+                                        <span class="flex items-center space-x-1 text-gray-500 text-sm">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"></path>
+                                            </svg>
+                                            <span>{{ comment.likes }}</span>
+                                        </span>
+                                        {% endif %}
+                                        {% if app.user %}
+                                        <button onclick="showReplyForm({{ comment.id }})" class="text-gray-500 hover:text-gray-300 transition text-sm font-medium">
+                                            Répondre
+                                        </button>
+                                        {% endif %}
+                                    </div>
+
+                                    {# Formulaire de réponse (caché par défaut) #}
+                                    {% if app.user %}
+                                    <div id="reply-form-{{ comment.id }}" class="hidden mt-4">
+                                        <form action="{{ path('app_video_show', {id: video.id}) }}" method="post" data-turbo="false">
+                                            <input type="hidden" name="comment_reply[_token]" value="{{ csrf_token('comment_reply') }}">
+                                            <input type="hidden" name="comment_reply[parentId]" value="{{ comment.id }}">
+                                            <div class="flex space-x-3">
+                                                <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center flex-shrink-0">
+                                                    <span class="text-white text-xs font-medium">{{ app.user.name|slice(0, 1)|upper }}</span>
+                                                </div>
+                                                <div class="flex-1">
+                                                    <textarea name="comment_reply[content]" rows="2" placeholder="Répondre à {{ comment.createdBy.name }}..." required
+                                                        class="w-full px-3 py-2 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200 resize-none text-sm"></textarea>
+                                                    <div class="flex justify-end space-x-2 mt-2">
+                                                        <button type="button" onclick="hideReplyForm({{ comment.id }})" class="px-3 py-1 text-gray-400 hover:text-white transition text-sm">
+                                                            Annuler
+                                                        </button>
+                                                        <button type="submit" class="px-4 py-1 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-full transition">
+                                                            Répondre
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    {% endif %}
+
+                                    {# Réponses au commentaire #}
+                                    {% if comment.replies|length > 0 %}
+                                    <div class="mt-4 space-y-4 pl-4 border-l-2 border-gray-700">
+                                        {% for reply in comment.replies %}
+                                        <div class="flex space-x-3" id="comment-{{ reply.id }}">
+                                            <div class="w-8 h-8 bg-gradient-to-br from-gray-600 to-gray-700 rounded-full flex items-center justify-center flex-shrink-0">
+                                                <span class="text-white text-xs font-medium">{{ reply.createdBy.name|slice(0, 1)|upper }}</span>
+                                            </div>
+                                            <div class="flex-1">
+                                                <div class="flex items-center space-x-2">
+                                                    <span class="text-white text-sm font-semibold">{{ reply.createdBy.name }}</span>
+                                                    {% if reply.createdBy.id == video.owner.id %}
+                                                    <span class="px-2 py-0.5 bg-gray-700 text-gray-300 text-xs rounded">Créateur</span>
+                                                    {% endif %}
+                                                    <span class="text-gray-500 text-xs">{{ reply.createdAt|date('d/m/Y à H:i') }}</span>
+                                                </div>
+                                                <p class="text-gray-300 text-sm mt-1 whitespace-pre-line">{{ reply.content }}</p>
+                                                <div class="flex items-center space-x-4 mt-2">
+                                                    {% if app.user %}
+                                                    <form action="{{ path('app_comment_like', {id: reply.id}) }}" method="post" class="inline" data-turbo="false">
+                                                        <input type="hidden" name="_token" value="{{ csrf_token('like' ~ reply.id) }}">
+                                                        <button type="submit" class="flex items-center space-x-1 text-gray-500 hover:text-purple-400 transition text-xs group">
+                                                            <svg class="w-3 h-3 group-hover:scale-110 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"></path>
+                                                            </svg>
+                                                            <span>{{ reply.likes }}</span>
+                                                        </button>
+                                                    </form>
+                                                    {% else %}
+                                                    <span class="flex items-center space-x-1 text-gray-500 text-xs">
+                                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"></path>
+                                                        </svg>
+                                                        <span>{{ reply.likes }}</span>
+                                                    </span>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-12">
+                        <div class="w-16 h-16 mx-auto mb-4 bg-gray-700/50 rounded-full flex items-center justify-center">
+                            <svg class="w-8 h-8 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                            </svg>
+                        </div>
+                        <p class="text-gray-400">Aucun commentaire pour le moment.</p>
+                        <p class="text-gray-500 text-sm mt-1">Soyez le premier à donner votre avis !</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        {# Colonne latérale - Vidéos suggérées #}
+        <div class="lg:col-span-1">
+            <h3 class="text-lg font-semibold text-white mb-4">Vidéos suggérées</h3>
+            <div class="space-y-4">
+                {# Placeholder pour vidéos suggérées #}
+                <p class="text-gray-500 text-sm">Les vidéos suggérées apparaîtront ici.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function showReplyForm(commentId) {
+    document.getElementById('reply-form-' + commentId).classList.remove('hidden');
+}
+
+function hideReplyForm(commentId) {
+    document.getElementById('reply-form-' + commentId).classList.add('hidden');
+}
+</script>
+{% endblock %}

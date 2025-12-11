@@ -1,0 +1,133 @@
+{% extends 'base_auth.html.twig' %}
+
+{% block title %}Connexion - StreamNow{% endblock %}
+
+{% block body %}
+<div class="min-h-screen flex items-center justify-center px-4 py-12">
+    <div class="max-w-md w-full space-y-8">
+        {# Logo et titre #}
+        <div class="text-center">
+            <div class="flex justify-center mb-4">
+                <div class="w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-500 rounded-2xl flex items-center justify-center shadow-lg shadow-purple-500/30">
+                    <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+            </div>
+            <h2 class="text-3xl font-extrabold text-white">
+                Connexion
+            </h2>
+            <p class="mt-2 text-sm text-gray-400">
+                Bienvenue sur StreamNow
+            </p>
+        </div>
+
+        {# Carte de connexion #}
+        <div class="bg-gray-800/50 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-700/50 p-8">
+            {% if error %}
+                <div class="mb-6 p-4 bg-red-500/10 border border-red-500/50 rounded-lg">
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 text-red-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <span class="text-red-400 text-sm">{{ error.messageKey|trans(error.messageData, 'security') }}</span>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if app.user %}
+                <div class="mb-6 p-4 bg-green-500/10 border border-green-500/50 rounded-lg">
+                    <div class="flex items-center justify-between">
+                        <span class="text-green-400 text-sm">Connecté en tant que {{ app.user.userIdentifier }}</span>
+                        <a href="{{ logout_path() }}" class="text-purple-400 hover:text-purple-300 text-sm font-medium transition">Se déconnecter</a>
+                    </div>
+                </div>
+            {% endif %}
+
+            <form method="post" class="space-y-6">
+                <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
+                
+                {# Champ Email #}
+                <div>
+                    <label for="username" class="block text-sm font-medium text-gray-300 mb-2">
+                        Adresse email
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"></path>
+                            </svg>
+                        </div>
+                        <input type="email" name="_username" id="username" value="{{ last_username }}" 
+                            class="w-full pl-10 pr-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200"
+                            placeholder="vous@exemple.com" autocomplete="email" required autofocus>
+                    </div>
+                </div>
+
+                {# Champ Mot de passe #}
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-300 mb-2">
+                        Mot de passe
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                            </svg>
+                        </div>
+                        <input type="password" name="_password" id="password" 
+                            class="w-full pl-10 pr-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200"
+                            placeholder="••••••••" autocomplete="current-password" required>
+                    </div>
+                </div>
+
+                {# Se souvenir de moi #}
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <input type="checkbox" name="_remember_me" id="_remember_me" 
+                            class="w-4 h-4 text-purple-600 bg-gray-800 border-gray-700 rounded focus:ring-purple-500 focus:ring-2">
+                        <label for="_remember_me" class="ml-2 text-sm text-gray-300">
+                            Se souvenir de moi
+                        </label>
+                    </div>
+                    <a href="#" class="text-sm text-purple-400 hover:text-purple-300 transition">
+                        Mot de passe oublié ?
+                    </a>
+                </div>
+
+                {# Bouton de connexion #}
+                <button type="submit" 
+                    class="w-full py-3 px-4 bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 text-white font-semibold rounded-lg shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition duration-300 transform hover:scale-[1.02]">
+                    Se connecter
+                </button>
+            </form>
+
+            {# Séparateur #}
+            <div class="mt-6">
+                <div class="relative">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-gray-700"></div>
+                    </div>
+                    <div class="relative flex justify-center text-sm">
+                        <span class="px-4 bg-gray-800/50 text-gray-400">Pas encore de compte ?</span>
+                    </div>
+                </div>
+            </div>
+
+            {# Lien vers inscription #}
+            <div class="mt-6">
+                <a href="{{ path('app_register') }}" 
+                    class="w-full flex justify-center py-3 px-4 border-2 border-purple-500/50 text-purple-400 font-semibold rounded-lg hover:bg-purple-500/10 hover:border-purple-500 transition duration-300">
+                    Créer un compte
+                </a>
+            </div>
+        </div>
+
+        {# Footer #}
+        <p class="text-center text-xs text-gray-500">
+            © {{ "now"|date("Y") }} StreamNow. Tous droits réservés.
+        </p>
+    </div>
+</div>
+{% endblock %}

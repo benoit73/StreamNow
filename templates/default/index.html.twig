@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}StreamNow - Partagez vos vidéos{% endblock %}
+
+{% block body %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    {# Hero section si pas connecté #}
+    {% if not app.user %}
+        {% include 'components/_hero.html.twig' %}
+    {% endif %}
+
+    {# Section des vidéos #}
+    <div class="mb-8">
+        {% include 'components/_section_header.html.twig' with {
+            title: app.user ? 'Vidéos recommandées' : 'Vidéos populaires',
+            icon: 'fire',
+            iconColor: 'purple'
+        } %}
+
+        {% include 'components/_video_grid.html.twig' with {videos: videos} %}
+    </div>
+
+    {# Section catégories #}
+    {% include 'components/_category_grid.html.twig' with {categories: categories} %}
+</div>
+{% endblock %}

@@ -1,0 +1,211 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mettre en ligne une vidéo - StreamNow{% endblock %}
+
+{% block body %}
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    {# En-tête #}
+    <div class="mb-8">
+        <a href="{{ path('app_home') }}" class="inline-flex items-center text-gray-400 hover:text-white transition mb-4">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+            </svg>
+            Retour à l'accueil
+        </a>
+        <h1 class="text-3xl font-bold text-white flex items-center">
+            <div class="w-12 h-12 bg-gradient-to-br from-purple-600 to-pink-500 rounded-xl flex items-center justify-center mr-4 shadow-lg shadow-purple-500/30">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"></path>
+                </svg>
+            </div>
+            Mettre en ligne une vidéo
+        </h1>
+        <p class="text-gray-400 mt-2 ml-16">Partagez votre contenu avec la communauté StreamNow</p>
+    </div>
+
+    {# Formulaire principal #}
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {# Colonne formulaire #}
+        <div class="lg:col-span-2">
+            <div class="bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-700/50 p-6 md:p-8">
+                {# Affichage des erreurs globales #}
+                {% if form.vars.errors|length > 0 %}
+                    <div class="mb-6 p-4 bg-red-500/10 border border-red-500/50 rounded-lg">
+                        {% for error in form.vars.errors %}
+                            <div class="flex items-center text-red-400 text-sm">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                {{ error.message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {{ form_start(form, {'attr': {'class': 'space-y-6', 'novalidate': 'novalidate', 'data-turbo': 'false'}}) }}
+                
+                {# Titre #}
+                <div>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none" style="top: 28px;">
+                            <svg class="h-5 w-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+                            </svg>
+                        </div>
+                        {{ form_row(form.title, {
+                            'attr': {'class': 'w-full pl-10 pr-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200'}
+                        }) }}
+                    </div>
+                </div>
+
+                {# Description #}
+                <div>
+                    {{ form_row(form.description) }}
+                    <p class="mt-1 text-xs text-gray-500">Une bonne description aide les utilisateurs à trouver votre vidéo</p>
+                </div>
+
+                {# URL de la vidéo #}
+                <div>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none" style="top: 28px;">
+                            <svg class="h-5 w-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                            </svg>
+                        </div>
+                        {{ form_row(form.url, {
+                            'attr': {'class': 'w-full pl-10 pr-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200'}
+                        }) }}
+                    </div>
+                    <p class="mt-1 text-xs text-gray-500">Collez l'URL YouTube, Vimeo ou d'une autre plateforme</p>
+                </div>
+
+                {# URL de la miniature #}
+                <div>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none" style="top: 28px;">
+                            <svg class="h-5 w-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        {{ form_row(form.thumbnail, {
+                            'attr': {'class': 'w-full pl-10 pr-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200', 'id': 'thumbnail-input'}
+                        }) }}
+                    </div>
+                    <p class="mt-1 text-xs text-gray-500">Une miniature attrayante augmente les clics</p>
+                </div>
+
+                {# Boutons d'action #}
+                <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                    <button type="submit" 
+                        class="flex-1 flex items-center justify-center py-3 px-6 bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 text-white font-semibold rounded-lg shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition duration-300 transform hover:scale-[1.02]">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                        </svg>
+                        Publier la vidéo
+                    </button>
+                    <a href="{{ path('app_home') }}" 
+                        class="flex items-center justify-center py-3 px-6 border-2 border-gray-600 text-gray-300 font-semibold rounded-lg hover:bg-gray-700/50 hover:border-gray-500 transition duration-300">
+                        Annuler
+                    </a>
+                </div>
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+
+        {# Colonne aperçu #}
+        <div class="lg:col-span-1">
+            <div class="bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-700/50 p-6 sticky top-24">
+                <h3 class="text-lg font-semibold text-white mb-4 flex items-center">
+                    <svg class="w-5 h-5 mr-2 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                    </svg>
+                    Aperçu
+                </h3>
+                
+                {# Carte de prévisualisation #}
+                <div class="bg-gray-900/50 rounded-xl overflow-hidden border border-gray-700/50">
+                    <div class="aspect-video bg-gray-700 relative" id="preview-thumbnail">
+                        <div class="absolute inset-0 flex items-center justify-center text-gray-500">
+                            <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <img id="preview-image" src="" alt="Aperçu" class="w-full h-full object-cover hidden">
+                    </div>
+                    <div class="p-3">
+                        <div class="flex space-x-3">
+                            <div class="w-9 h-9 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center flex-shrink-0">
+                                <span class="text-white text-sm font-medium">{{ app.user.name|slice(0, 1)|upper }}</span>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p id="preview-title" class="text-white text-sm font-medium line-clamp-2">Titre de votre vidéo</p>
+                                <p class="text-gray-400 text-xs mt-1">{{ app.user.name }}</p>
+                                <p class="text-gray-500 text-xs">0 vues • à l'instant</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {# Conseils #}
+                <div class="mt-6 space-y-4">
+                    <h4 class="text-sm font-medium text-gray-300">Conseils pour une bonne vidéo</h4>
+                    <ul class="space-y-3 text-sm text-gray-400">
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            Choisissez un titre accrocheur et descriptif
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            Ajoutez une description détaillée
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            Utilisez une miniature de qualité (16:9)
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Aperçu du titre
+    const titleInput = document.querySelector('input[name="video[title]"]');
+    const previewTitle = document.getElementById('preview-title');
+    
+    if (titleInput && previewTitle) {
+        titleInput.addEventListener('input', function() {
+            previewTitle.textContent = this.value || 'Titre de votre vidéo';
+        });
+    }
+    
+    // Aperçu de la miniature
+    const thumbnailInput = document.querySelector('input[name="video[thumbnail]"]');
+    const previewImage = document.getElementById('preview-image');
+    
+    if (thumbnailInput && previewImage) {
+        thumbnailInput.addEventListener('input', function() {
+            if (this.value) {
+                previewImage.src = this.value;
+                previewImage.classList.remove('hidden');
+                previewImage.onerror = function() {
+                    this.classList.add('hidden');
+                };
+            } else {
+                previewImage.classList.add('hidden');
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

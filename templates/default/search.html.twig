@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% if query %}Recherche : {{ query }}{% else %}Rechercher{% endif %} - StreamNow{% endblock %}
+
+{% block body %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    {# En-tête de recherche #}
+    <div class="mb-8">
+        {% if query %}
+            <h1 class="text-2xl md:text-3xl font-bold text-white mb-2">
+                Résultats pour "{{ query }}"
+            </h1>
+            <p class="text-gray-400">
+                {{ videos|length }} vidéo{{ videos|length > 1 ? 's' : '' }} trouvée{{ videos|length > 1 ? 's' : '' }}
+            </p>
+        {% else %}
+            <h1 class="text-2xl md:text-3xl font-bold text-white mb-2">
+                Rechercher des vidéos
+            </h1>
+            <p class="text-gray-400">
+                Utilisez la barre de recherche ci-dessus pour trouver des vidéos
+            </p>
+        {% endif %}
+    </div>
+
+    {% if query and videos|length > 0 %}
+        {# Grille de résultats #}
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {% for video in videos %}
+                {% include 'components/_video_card.html.twig' with {video: video} %}
+            {% endfor %}
+        </div>
+    {% elseif query %}
+        {# Aucun résultat #}
+        <div class="text-center py-16">
+            <div class="w-24 h-24 mx-auto mb-6 bg-gray-800/50 rounded-full flex items-center justify-center">
+                <svg class="w-12 h-12 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            </div>
+            <h2 class="text-xl font-semibold text-white mb-2">Aucune vidéo trouvée</h2>
+            <p class="text-gray-400 mb-6">Aucune vidéo ne correspond à "{{ query }}"</p>
+            <div class="space-y-2 text-gray-500 text-sm">
+                <p>Suggestions :</p>
+                <ul class="list-disc list-inside">
+                    <li>Vérifiez l'orthographe des mots</li>
+                    <li>Essayez des mots-clés différents</li>
+                    <li>Utilisez des termes plus généraux</li>
+                </ul>
+            </div>
+            <a href="{{ path('app_home') }}" class="inline-flex items-center mt-8 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 text-white font-medium rounded-full shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition duration-300">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                </svg>
+                Retour à l'accueil
+            </a>
+        </div>
+    {% else %}
+        {# Page de recherche sans requête #}
+        {% include 'components/_empty_state.html.twig' with {
+            icon: 'search',
+            title: 'Rechercher des vidéos',
+            message: 'Tapez votre recherche dans la barre ci-dessus'
+        } %}
+    {% endif %}
+</div>
+{% endblock %}
+            <div class="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-purple-600/20 to-pink-500/20 rounded-full flex items-center justify-center border border-purple-500/30">
+                <svg class="w-12 h-12 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            </div>
+            <h2 class="text-xl font-semibold text-white mb-2">Que recherchez-vous ?</h2>
+            <p class="text-gray-400 max-w-md mx-auto">
+                Tapez un mot-clé dans la barre de recherche pour trouver des vidéos par titre ou description.
+            </p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

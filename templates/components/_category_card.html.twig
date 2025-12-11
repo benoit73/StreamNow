@@ -1,0 +1,6 @@
+{# Carte de catégorie - Paramètres: category, color #}
+<a href="{{ path('app_category', {id: category.id}) }}" class="group bg-gradient-to-br {{ color }} p-4 rounded-xl text-center hover:scale-105 transition-transform duration-300 shadow-lg">
+    <img src="{{ category.logo }}" alt="{{ category.name }}" class="w-10 h-10 mx-auto mb-2 object-contain">
+    <span class="text-white font-medium text-sm">{{ category.name }}</span>
+    <span class="block text-white/70 text-xs mt-1">{{ category.videos|length }} vidéo{{ category.videos|length > 1 ? 's' : '' }}</span>
+</a>

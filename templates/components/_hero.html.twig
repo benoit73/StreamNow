@@ -1,0 +1,19 @@
+{# Hero section pour les visiteurs non connectés #}
+<div class="mb-12 bg-gradient-to-r from-purple-900/50 to-pink-900/50 rounded-2xl p-8 md:p-12 border border-purple-500/20">
+    <div class="max-w-3xl">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4">
+            Bienvenue sur <span class="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">StreamNow</span>
+        </h1>
+        <p class="text-xl text-gray-300 mb-8">
+            Découvrez, partagez et profitez de vidéos incroyables créées par notre communauté.
+        </p>
+        <div class="flex flex-wrap gap-4">
+            <a href="{{ path('app_register') }}" class="bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 text-white px-8 py-3 rounded-lg font-semibold shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition duration-300 transform hover:scale-105">
+                Commencer gratuitement
+            </a>
+            <a href="{{ path('app_login') }}" class="border-2 border-purple-500/50 text-purple-400 hover:bg-purple-500/10 hover:border-purple-500 px-8 py-3 rounded-lg font-semibold transition duration-300">
+                Se connecter
+            </a>
+        </div>
+    </div>
+</div>
