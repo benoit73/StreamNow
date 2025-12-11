@@ -9,14 +9,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/user')]
 final class UserController extends AbstractController
 {
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     #[Route('', name: 'app_user')]
     public function index(): Response
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         
         return $this->render('user/index.html.twig', [
             'user' => $this->getUser(),
@@ -40,10 +41,10 @@ final class UserController extends AbstractController
         ]);
     }
 
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     #[Route('/{id}/subscribe', name: 'app_user_subscribe', methods: ['POST'])]
     public function subscribe(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         /** @var User $currentUser */
         $currentUser = $this->getUser();

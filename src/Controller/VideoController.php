@@ -15,6 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/video')]
 final class VideoController extends AbstractController
@@ -27,10 +28,10 @@ final class VideoController extends AbstractController
         ]);
     }
 
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     #[Route('/new', name: 'app_video_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $video = new Video();
         $form = $this->createForm(VideoType::class, $video);
@@ -135,11 +136,11 @@ final class VideoController extends AbstractController
         ]);
     }
 
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     #[Route('/{id}/edit', name: 'app_video_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Video $video, EntityManagerInterface $entityManager): Response
     {
         // Vérifier que l'utilisateur est connecté et propriétaire de la vidéo
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
@@ -162,11 +163,11 @@ final class VideoController extends AbstractController
         ]);
     }
 
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     #[Route('/{id}/delete', name: 'app_video_delete', methods: ['POST'])]
     public function delete(Request $request, Video $video, EntityManagerInterface $entityManager): Response
     {
         // Vérifier que l'utilisateur est connecté et propriétaire de la vidéo
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
@@ -182,10 +183,10 @@ final class VideoController extends AbstractController
         return $this->redirectToRoute('app_user_profile', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
     }
 
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     #[Route('/{id}/like', name: 'app_video_like', methods: ['POST'])]
     public function like(Request $request, Video $video, EntityManagerInterface $entityManager, VideoLikeRepository $videoLikeRepository): Response
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
@@ -223,10 +224,10 @@ final class VideoController extends AbstractController
         return $this->redirectToRoute('app_video_show', ['id' => $video->getId()]);
     }
 
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     #[Route('/{id}/dislike', name: 'app_video_dislike', methods: ['POST'])]
     public function dislike(Request $request, Video $video, EntityManagerInterface $entityManager, VideoLikeRepository $videoLikeRepository): Response
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
