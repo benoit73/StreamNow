@@ -37,6 +37,9 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress --no-interaction
 
+      - name: Build Tailwind CSS
+        run: php bin/console tailwind:build
+
       - name: Create SQLite test database
         env:
           DATABASE_URL: sqlite:///%kernel.project_dir%/var/data_test.db
